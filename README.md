@@ -49,7 +49,7 @@
 
 #### Diagrama de sequência de algumas interações cliente-servidor:
 
-:::mermaid
+```mermaid
 sequenceDiagram
     Cliente->>Servidor: Inicializa o cliente
 
@@ -79,7 +79,7 @@ sequenceDiagram
         end
     end
 
-:::
+```
 
 ---
 

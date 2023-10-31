@@ -47,40 +47,6 @@
 > Validando que o cliente de fato foi registrado no servidor
 ![servidor2](images/servidor2.png)
 
-#### Diagrama de sequência de algumas interações cliente-servidor:
-
-:::mermaid
-sequenceDiagram
-    Cliente->>Servidor: Inicializa o cliente
-
-    alt Registro de Cliente
-        Cliente->>Servidor: Conecta ao servidor
-        Servidor->>Servidor: Estabelece a conexão
-        Cliente->>Servidor: Envia informações de registro
-        Servidor->>Servidor: Processa o registro
-        Servidor-->>Cliente: Confirmação de registro
-
-        opt Consulta de Usuários
-            Cliente->>Servidor: Solicita lista de usuários
-            Servidor->>Servidor: Recupera a lista de usuários
-            Servidor-->>Cliente: Lista de usuários
-        end
-
-        opt Detalhes de Usuário
-            Cliente->>Servidor: Solicita detalhes de um usuário
-            Servidor->>Servidor: Recupera detalhes do usuário
-            Servidor-->>Cliente: Detalhes do usuário
-        end
-
-        opt Encerramento da Conexão
-            Cliente->>Servidor: Encerra a conexão
-            Servidor->>Servidor: Fecha a conexão
-            Servidor-->>Cliente: Confirmação de encerramento
-        end
-    end
-
-:::
-
 ---
 
 ## Erros esperados na execução da aplicação:
@@ -96,8 +62,3 @@ sequenceDiagram
 
 > Terminal do servidor durante algumas das execuções acima
 ![esperado4](images/esperado4.png)
-
----
-
-## Implementação:
-

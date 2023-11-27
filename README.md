@@ -17,7 +17,7 @@
 - Matheus Campos
 - Matheus Folly
 
-### As atividades foram realizadas em conjunto de forma que os integrantes participassem na compreensão e desenvolvimento de forma coletiva, não foi designado funções específicas a serem implementada por cada membro.
+### As atividades foram realizadas em conjunto de forma que os integrantes participassem na compreensão e desenvolvimento de forma coletiva, não foram designadas funções específicas a serem implementadas por cada membro.
 ---
 
 ## Uso da aplicação (como executar o código):
@@ -29,6 +29,7 @@
 * Executar `python server.py` no terminal que for rodar o servidor
 * Executar `python client.py` no terminal que for rodar o cliente e responder os inputs
 * Validar se o cadastro foi realizado com sucesso
+* Verificar detalhes do usuário cadastrado (double click no nome do usuário)
 
 #### Exemplo visual:
 
@@ -47,9 +48,12 @@
 > Validando que o cliente de fato foi registrado no servidor
 ![servidor2](images/servidor2.png)
 
+> Verificar detalhes do usuário cadastrado (double click no nome do usuário)
+![cliente2](images/cliente2.png)
+
 ---
 
-## Erros esperados na execução da aplicação:
+## Erros esperados na execução da aplicação (tratados):
 
 > Cadastro de usuário com mesmo nome e IP
 ![esperado1](images/esperado1.png)
@@ -62,6 +66,14 @@
 
 > Terminal do servidor durante algumas das execuções acima
 ![esperado4](images/esperado4.png)
+
+---
+
+## Erros conhecidos:
+
+> Encerrar a conexão do cliente fechando a interface em vez de clicar em `Encerrar conexão`
+![close1](images/close1.png)
+![close2](images/close2.png)
 
 ---
 

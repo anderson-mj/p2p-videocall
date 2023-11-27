@@ -59,6 +59,7 @@ class ChatServer:
             try:
                 # Recebe uma mensagem do cliente
                 message = client_socket.recv(1024).decode()
+                print(f'{message}\n')
                 # Se a mensagem for 'list', obtém a lista de clientes
                 if message == 'list':
                     response = self.get_client_list()
@@ -70,15 +71,32 @@ class ChatServer:
                 elif message == 'quit':
                     self.disconnect_client(client_socket, client)
                     break
+                elif message.startswith('invite'):
+                    invitee = message.split(',')[1:]
+                    invitee_socket = self.get_client_socket(invitee)
+                    print(f'{invitee_socket}')
+                    if invitee_socket:
+                        self.send_message(invitee_socket, f'invite,{inviter_socket}')
+                elif message.startswith('accept'):
+                    inviter_port, invitee_port = message.split(',')[1:]
+                    if invitee_port:
+                        self.send_message(f'127.0.0.1{inviter_port}', f'accept,{invitee_port}')
                 # Caso contrário, a resposta é a mensagem do cliente
                 else:
                     response = f"{name}: {message}"
                 # Envia a resposta para o cliente
                 self.send_message(client_socket, response)
             # Se ocorrer um erro, desconecta o cliente
-            except:
+            except Exception as e:
+                print(f"Erro no cliente {client_address}: {e}")
                 self.disconnect_client(client_socket, client)
                 break
+    
+    def get_client_socket(self, name):
+        for client in self.clients:
+            if client['name'] == name:
+                return client['socket']
+        return None
 
     # Define um método para enviar uma mensagem de erro
     def send_error(self, client_socket, error_message):

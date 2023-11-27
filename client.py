@@ -1,5 +1,7 @@
 import socket
 import tkinter as tk
+from tkinter import messagebox
+from vidstream import CameraClient
 
 # Define a classe ChatClient
 class ChatClient:
@@ -27,6 +29,34 @@ class ChatClient:
         # Cria um botão para encerrar a conexão
         self.quit_button = tk.Button(self.root, text='Encerrar conexão', command=lambda: self.send_message('quit'))
         self.quit_button.pack(side=tk.LEFT)
+
+        # Add a button for inviting to a video call
+        self.invite_button = tk.Button(self.root, text='Chamar usuário', command=self.invite_to_call)
+        self.invite_button.pack(side=tk.LEFT)
+
+        self.camera_client = None
+        self.inviter = None
+
+    def invite_to_call(self):
+        selected_user = self.user_list.get(self.user_list.curselection())
+        self.send_message(f'invite,{selected_user}')
+
+    def receive_message(self, message):
+        if message.startswith('invite'):
+            inviter_port = message.split(',')[1]
+            response = messagebox.askquestion("Convite", f"Você foi convidado para uma chamada de vídeo por {inviter_port}. Aceitar?")
+            if response == 'yes':
+                self.send_message(f'accept,{inviter_port},{self.port}')
+        elif message.startswith('accept'):
+            invitee_port = message.split(',')[1]
+            if invitee_port:
+                self.start_video_call(invitee_port)
+
+    def start_video_call(self, invitee_port):
+        target_ip = '127.0.0.1'
+        target_port = invitee_port
+        self.camera_client = CameraClient(target_ip, invitee_port)
+        self.camera_client.start_server()
 
     # Define um método para registrar o cliente no servidor
     def register(self, name, client_call_port):

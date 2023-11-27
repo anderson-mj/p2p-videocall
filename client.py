@@ -1,5 +1,9 @@
 import socket
+import threading
 import tkinter as tk
+import time
+from tkinter import messagebox
+from vidstream import CameraClient, StreamingServer
 
 # Define a classe ChatClient
 class ChatClient:
@@ -27,6 +31,33 @@ class ChatClient:
         # Cria um botão para encerrar a conexão
         self.quit_button = tk.Button(self.root, text='Encerrar conexão', command=lambda: self.send_message('quit'))
         self.quit_button.pack(side=tk.LEFT)
+
+        # Add a button for inviting to a video call
+        self.invite_button = tk.Button(self.root, text='Chamar usuário', command=self.invite_to_call)
+        self.invite_button.pack(side=tk.LEFT)
+
+        self.camera_client = None
+        self.inviter = None
+
+    def invite_to_call(self):
+        selected_user = self.user_list.get(self.user_list.curselection())
+        self.send_message(f'invite,{selected_user}')
+        response, invitee_port = self.client_socket.recv(1024).decode().split(',')[0:]
+        if response == "yes":
+            self.start_video_call(invitee_port)
+
+    def start_video_call(self, invitee_port):
+        self.target_ip = self.ip
+        if invitee_port == '4500':
+            self.streaming_server_port = 4000
+        else:
+            self.streaming_server_port = 4500
+        self.target_port = int(invitee_port)
+        self.stream_server = StreamingServer(self.target_ip, self.streaming_server_port)
+        self.camera_client = CameraClient(self.target_ip, self.target_port)
+        self.stream_server.start_server()
+        time.sleep(2)
+        self.camera_client.start_stream()
 
     # Define um método para registrar o cliente no servidor
     def register(self, name, client_call_port):

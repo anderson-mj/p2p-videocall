@@ -59,7 +59,8 @@ class ChatServer:
             try:
                 # Recebe uma mensagem do cliente
                 message = client_socket.recv(1024).decode()
-                print(f'{message}\n')
+                #print(f'{message}\n')
+                #print(f'\n###client### {client_socket} ###client###\n')
                 # Se a mensagem for 'list', obtém a lista de clientes
                 if message == 'list':
                     response = self.get_client_list(client_socket)
@@ -72,15 +73,13 @@ class ChatServer:
                     self.disconnect_client(client_socket, client)
                     break
                 elif message.startswith('invite'):
-                    invitee = message.split(',')[1:]
-                    invitee_socket = self.get_client_socket(invitee)
-                    print(f'{invitee_socket}')
-                    if invitee_socket:
-                        self.send_message(invitee_socket, f'invite,{inviter_socket}')
-                elif message.startswith('accept'):
-                    inviter_port, invitee_port = message.split(',')[1:]
-                    if invitee_port:
-                        self.send_message(f'127.0.0.1{inviter_port}', f'accept,{invitee_port}')
+                    invitee = message.split(',')[1]
+                    invitee_port = self.get_client_details(invitee).split(',')[1]
+                    response = f'yes,{invitee_port}'
+                # elif message.startswith('accept'):
+                #     inviter_port, invitee_port = message.split(',')[1:]
+                #     if invitee_port:
+                #         self.send_message(f'127.0.0.1{inviter_port}', f'accept,{invitee_port}')
                 # Caso contrário, a resposta é a mensagem do cliente
                 else:
                     response = f"{name}: {message}"
